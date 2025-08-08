@@ -5,119 +5,296 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interview Assistant</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-        }
-        .section {
-            margin-bottom: 30px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fafafa;
-        }
-        .section h2 {
-            color: #555;
-            margin-top: 0;
-        }
-        .file-input {
-            margin: 10px 0;
-        }
-        .btn {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 10px 5px;
-        }
-        .btn:hover {
-            background-color: #0056b3;
-        }
-        .btn:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-        .result {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 5px;
-            background-color: #e9ecef;
-            border-left: 4px solid #007bff;
-        }
-        .error {
-            background-color: #f8d7da;
-            border-left-color: #dc3545;
-            color: #721c24;
-        }
-        .success {
-            background-color: #d4edda;
-            border-left-color: #28a745;
-            color: #155724;
-        }
-        .question {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
-        }
-        .answer {
             line-height: 1.6;
-            color: #555;
         }
-        #recordBtn {
-            background-color: #dc3545;
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
-        #recordBtn:hover {
-            background-color: #c82333;
+        
+        .header {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            padding: 40px;
+            text-align: center;
+            color: white;
         }
-        #recordBtn.recording {
-            background-color: #28a745;
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #3ecf8e, #4dc8f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: white;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section p {
+            color: #64748b;
+            margin-bottom: 24px;
+            font-size: 1rem;
+        }
+        
+        .file-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px dashed #cbd5e0;
+            border-radius: 12px;
+            background: #f8fafc;
+            margin-bottom: 20px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .file-input:hover {
+            border-color: #3ecf8e;
+            background: #f0fdf4;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #3ecf8e 0%, #2dd4bf 100%);
+            color: white;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(62, 207, 142, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(62, 207, 142, 0.4);
+        }
+        
+        .btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn-record {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+            font-size: 1.1rem;
+            padding: 16px 32px;
+        }
+        
+        .btn-record:hover {
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+        }
+        
+        .btn-record.recording {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            animation: pulse 2s infinite;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .btn-record.recording::before {
+            content: '● ';
+            color: white;
+        }
+        
+        .result {
+            margin-top: 24px;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #3ecf8e;
+            background: #f0fdf4;
+            transition: all 0.3s ease;
+        }
+        
+        .result.error {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+            color: #991b1b;
+        }
+        
+        .result.success {
+            background: #f0fdf4;
+            border-left-color: #22c55e;
+            color: #166534;
+        }
+        
+        .question {
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1a202c;
+            font-size: 1.1rem;
+        }
+        
+        .answer {
+            line-height: 1.7;
+            color: #374151;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            margin-top: 12px;
+        }
+        
         .loading {
             display: none;
             text-align: center;
-            margin: 20px 0;
+            margin: 24px 0;
+            color: #64748b;
+        }
+        
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #cbd5e0;
+            border-radius: 50%;
+            border-top-color: #3ecf8e;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .record-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .record-status {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: #f1f5f9;
+            color: #64748b;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .record-status.active {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        @media (max-width: 640px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .section {
+                padding: 20px;
+                margin-bottom: 24px;
+            }
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>🎤 Interview Assistant</h1>
-        
-        <div class="section">
-            <h2>📄 Upload Your CV</h2>
-            <p>Upload your CV first to get personalized interview answers based on your experience.</p>
-            <input type="file" id="cvFile" class="file-input" accept=".pdf,.doc,.docx,.txt">
-            <button onclick="uploadCV()" class="btn">Upload CV</button>
-            <div id="cvResult"></div>
+        <div class="header">
+            <h1>🎤 Interview Assistant</h1>
+            <p>AI-powered interview practice with personalized responses</p>
         </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2>📄 Upload Your CV</h2>
+                <p>Upload your CV first to get personalized interview answers based on your experience and skills.</p>
+                <input type="file" id="cvFile" class="file-input" accept=".pdf,.doc,.docx,.txt">
+                <button onclick="uploadCV()" class="btn">Upload CV</button>
+                <div id="cvResult"></div>
+            </div>
 
-        <div class="section">
-            <h2>🎙️ Record Interview Question</h2>
-            <p>Click the button below to record an interview question, and get an AI-generated answer.</p>
-            <input type="file" id="audioFile" class="file-input" accept="audio/*">
-            <button onclick="processAudio()" class="btn">Process Audio</button>
-            <div class="loading" id="loading">Processing... Please wait.</div>
-            <div id="audioResult"></div>
+            <div class="section">
+                <h2>🎙️ Live Interview Recording</h2>
+                <p>Click record to start listening for interview questions. The AI will automatically detect when you stop speaking and provide an answer.</p>
+                
+                <div class="record-controls">
+                    <button id="recordBtn" onclick="toggleRecording()" class="btn btn-record">
+                        Start Recording
+                    </button>
+                    <div id="recordStatus" class="record-status">Ready to record</div>
+                </div>
+                
+                <div class="loading" id="loading">Processing your question...</div>
+                <div id="audioResult"></div>
+            </div>
         </div>
     </div>
 
     <script>
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+        let stream;
+
         async function uploadCV() {
             const fileInput = document.getElementById('cvFile');
             const file = fileInput.files[0];
@@ -148,20 +325,57 @@
             }
         }
 
-        async function processAudio() {
-            const fileInput = document.getElementById('audioFile');
-            const file = fileInput.files[0];
-            
-            if (!file) {
-                showResult('audioResult', 'Please select an audio file first.', 'error');
-                return;
-            }
+        async function toggleRecording() {
+            const recordBtn = document.getElementById('recordBtn');
+            const recordStatus = document.getElementById('recordStatus');
 
+            if (!isRecording) {
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = (event) => {
+                        audioChunks.push(event.data);
+                    };
+
+                    mediaRecorder.onstop = async () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        await processRecordedAudio(audioBlob);
+                        
+                        // Stop all tracks to turn off microphone
+                        stream.getTracks().forEach(track => track.stop());
+                    };
+
+                    mediaRecorder.start();
+                    isRecording = true;
+                    
+                    recordBtn.textContent = 'Stop Recording';
+                    recordBtn.classList.add('recording');
+                    recordStatus.textContent = 'Recording... Click stop when done';
+                    recordStatus.classList.add('active');
+                    
+                } catch (error) {
+                    showResult('audioResult', `❌ Error accessing microphone: ${error.message}`, 'error');
+                }
+            } else {
+                mediaRecorder.stop();
+                isRecording = false;
+                
+                recordBtn.textContent = 'Start Recording';
+                recordBtn.classList.remove('recording');
+                recordStatus.textContent = 'Processing audio...';
+                recordStatus.classList.remove('active');
+            }
+        }
+
+        async function processRecordedAudio(audioBlob) {
             const formData = new FormData();
-            formData.append('audio', file);
+            formData.append('audio', audioBlob, 'recording.wav');
 
             try {
                 document.getElementById('loading').style.display = 'block';
+                document.getElementById('recordStatus').textContent = 'Processing your question...';
                 
                 const response = await fetch('/process_audio', {
                     method: 'POST',
@@ -170,11 +384,12 @@
 
                 const result = await response.json();
                 document.getElementById('loading').style.display = 'none';
+                document.getElementById('recordStatus').textContent = 'Ready to record';
                 
                 if (response.ok) {
                     const resultHTML = `
                         <div class="question">Question: ${result.question}</div>
-                        <div class="answer">Answer: ${result.answer}</div>
+                        <div class="answer">${result.answer}</div>
                     `;
                     showResult('audioResult', resultHTML, 'success');
                 } else {
@@ -182,6 +397,7 @@
                 }
             } catch (error) {
                 document.getElementById('loading').style.display = 'none';
+                document.getElementById('recordStatus').textContent = 'Ready to record';
                 showResult('audioResult', `❌ Error: ${error.message}`, 'error');
             }
         }
@@ -192,23 +408,24 @@
             resultDiv.className = `result ${type}`;
         }
 
-        // Optional: Add drag and drop functionality
-        ['cvFile', 'audioFile'].forEach(id => {
-            const element = document.getElementById(id);
-            element.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                e.target.style.backgroundColor = '#e9ecef';
-            });
-            
-            element.addEventListener('dragleave', (e) => {
-                e.target.style.backgroundColor = '';
-            });
-            
-            element.addEventListener('drop', (e) => {
-                e.preventDefault();
-                e.target.style.backgroundColor = '';
-                e.target.files = e.dataTransfer.files;
-            });
+        // Add drag and drop functionality for CV upload
+        const cvFileInput = document.getElementById('cvFile');
+        cvFileInput.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            cvFileInput.style.borderColor = '#3ecf8e';
+            cvFileInput.style.background = '#f0fdf4';
+        });
+        
+        cvFileInput.addEventListener('dragleave', (e) => {
+            cvFileInput.style.borderColor = '#cbd5e0';
+            cvFileInput.style.background = '#f8fafc';
+        });
+        
+        cvFileInput.addEventListener('drop', (e) => {
+            e.preventDefault();
+            cvFileInput.style.borderColor = '#cbd5e0';
+            cvFileInput.style.background = '#f8fafc';
+            cvFileInput.files = e.dataTransfer.files;
         });
     </script>
 </body>
